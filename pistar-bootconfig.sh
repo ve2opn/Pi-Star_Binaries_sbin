@@ -17,7 +17,7 @@ then
         exit 1
 fi
 
-if [ ! -f /boot/Pi-Star_Config_*.zip ]; then
+if [ ! -f /media/boot/Pi-Star_Config_*.zip ]; then
 	exit 1
 fi
 
@@ -27,7 +27,7 @@ if [ ! -d /tmp/config_restore ]; then
 fi
 
 # Unpack the configs
-unzip -j /boot/Pi-Star_Config_*.zip -d /tmp/config_restore/ 2>&1
+unzip -j /media/boot/Pi-Star_Config_*.zip -d /tmp/config_restore/ 2>&1
 
 # Stop the services
 systemctl stop cron.service 2>&1
@@ -41,7 +41,7 @@ systemctl stop p25gateway.service 2>&1
 
 # Make the disk writable
 mount -o remount,rw / 2>&1
-mount -o remount,rw /boot 2>&1
+mount -o remount,rw /media/boot 2>&1
 
 # Overwrite the configs
 rm -f /etc/dstar-radio.* 2>&1
@@ -54,7 +54,7 @@ mv -f /tmp/config_restore/* /etc/ 2>&1
 timedatectl set-timezone `grep date /var/www/dashboard/config/config.php | grep -o "'.*'" | sed "s/'//g"`
 
 # Clean up
-rm -rf /boot/Pi-Star_Config_*.zip 2>&1
+rm -rf /media/boot/Pi-Star_Config_*.zip 2>&1
 sync: sync; sync;
 reboot
 

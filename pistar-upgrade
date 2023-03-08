@@ -38,7 +38,7 @@ main_function() {
 
 	# Make the disk writable
 	mount -o remount,rw /
-	mount -o remount,rw /boot
+	mount -o remount,rw /media/boot
 
 	echo "Detected Pi-Star ${pistarCurVersion} running on ${pistarHardware} hardware, attached to ${pistarModem} modem..."
 
@@ -75,7 +75,7 @@ main_function() {
 	;;
 	3.4.3)
 		# Check to see if the USB Max Current setting is in place or not...
-		if grep -Fxq "max_usb_current=1" /boot/config.txt
+		if grep -Fxq "max_usb_current=1" /media/boot/config.txt
 			then
     			# It's already there, just version bump
 			if [ ! -z "${pistarHardware}" ]; then
@@ -91,7 +91,7 @@ main_function() {
 		else
 			# Add the config lines and then version bump
 			echo "Updating boot config to add high current USB support"
-			echo -e "\n# Increase USB Current\nmax_usb_current=1" >> /boot/config.txt
+			echo -e "\n# Increase USB Current\nmax_usb_current=1" >> /media/boot/config.txt
 			if [ ! -z "${pistarHardware}" ]; then
 				Message="Upgraded from ${pistarCurVersion} to 3.4.4..."
 				sed -i 's/3.4.3/3.4.4/g' /etc/pistar-release
@@ -798,7 +798,7 @@ main_function() {
 		echo '[Service]' >> /etc/systemd/system/apt-daily.service
 		echo 'Type=oneshot' >> /etc/systemd/system/apt-daily.service
 		echo 'ExecStartPre=/bin/mount -o remount,rw /' >> /etc/systemd/system/apt-daily.service
-		echo 'ExecStartPre=/bin/mount -o remount,rw /boot' >> /etc/systemd/system/apt-daily.service
+		echo 'ExecStartPre=/bin/mount -o remount,rw /media/boot' >> /etc/systemd/system/apt-daily.service
 		echo 'ExecStart=/usr/lib/apt/apt.systemd.daily update' >> /etc/systemd/system/apt-daily.service
 
 		#apt-daily-upgrade.service 
@@ -811,7 +811,7 @@ main_function() {
 		echo '[Service]' >> /etc/systemd/system/apt-daily-upgrade.service
 		echo 'Type=oneshot' >> /etc/systemd/system/apt-daily-upgrade.service
 		echo 'ExecStartPre=/bin/mount -o remount,rw /' >> /etc/systemd/system/apt-daily-upgrade.service
-		echo 'ExecStartPre=/bin/mount -o remount,rw /boot' >> /etc/systemd/system/apt-daily-upgrade.service
+		echo 'ExecStartPre=/bin/mount -o remount,rw /media/boot' >> /etc/systemd/system/apt-daily-upgrade.service
 		echo 'ExecStart=/usr/lib/apt/apt.systemd.daily install' >> /etc/systemd/system/apt-daily-upgrade.service
 		echo 'KillMode=process' >> /etc/systemd/system/apt-daily-upgrade.service
 		echo 'TimeoutStopSec=900' >> /etc/systemd/system/apt-daily-upgrade.service
@@ -837,11 +837,11 @@ main_function() {
 
 		# apt-daily.service
  		echo 'ExecStartPost=/bin/mount -o remount,ro /' >> /etc/systemd/system/apt-daily.service
- 		echo 'ExecStartPost=/bin/mount -o remount,ro /boot' >> /etc/systemd/system/apt-daily.service
+ 		echo 'ExecStartPost=/bin/mount -o remount,ro /media/boot' >> /etc/systemd/system/apt-daily.service
 
   		#apt-daily-upgrade.service 
  		echo 'ExecStartPost=/bin/mount -o remount,ro /' >> /etc/systemd/system/apt-daily-upgrade.service
- 		echo 'ExecStartPost=/bin/mount -o remount,ro /boot' >> /etc/systemd/system/apt-daily-upgrade.service
+ 		echo 'ExecStartPost=/bin/mount -o remount,ro /media/boot' >> /etc/systemd/system/apt-daily-upgrade.service
 
 		# Re-create the MOTD
 		/usr/local/sbin/pistar-motdgen
@@ -1068,20 +1068,20 @@ main_function() {
 		systemctl daemon-reload
 		systemctl enable mobilegps.service
 		
-		# Modify the /boot/config.txt to bring it up to date
-		sed -i '/USB Current/d' /boot/config.txt
-		sed -i '/max_usb_current/d' /boot/config.txt
-		sed -i '/Buster Support/d' /boot/config.txt
-		sed -i '/dtoverlay=vc4-fkms-v3d/d' /boot/config.txt
-		sed -i 's/pi3-miniuart-bt/miniuart-bt/g' /boot/config.txt
-		echo "" >> /boot/config.txt
-		echo "[pi4]" >> /boot/config.txt
-		echo "# Enable DRM VC4 V3D driver on top of the dispmanx display stack" >> /boot/config.txt
-		echo "dtoverlay=vc4-fkms-v3d" >> /boot/config.txt
-		echo "max_framebuffers=2" >> /boot/config.txt
-		echo "" >> /boot/config.txt
-		echo "[all]" >> /boot/config.txt
-		echo "#dtoverlay=vc4-fkms-v3d" >> /boot/config.txt
+		# Modify the /media/boot/config.txt to bring it up to date
+		sed -i '/USB Current/d' /media/boot/config.txt
+		sed -i '/max_usb_current/d' /media/boot/config.txt
+		sed -i '/Buster Support/d' /media/boot/config.txt
+		sed -i '/dtoverlay=vc4-fkms-v3d/d' /media/boot/config.txt
+		sed -i 's/pi3-miniuart-bt/miniuart-bt/g' /media/boot/config.txt
+		echo "" >> /media/boot/config.txt
+		echo "[pi4]" >> /media/boot/config.txt
+		echo "# Enable DRM VC4 V3D driver on top of the dispmanx display stack" >> /media/boot/config.txt
+		echo "dtoverlay=vc4-fkms-v3d" >> /media/boot/config.txt
+		echo "max_framebuffers=2" >> /media/boot/config.txt
+		echo "" >> /media/boot/config.txt
+		echo "[all]" >> /media/boot/config.txt
+		echo "#dtoverlay=vc4-fkms-v3d" >> /media/boot/config.txt
 
 		# Remove the exim4 stuff from fstab
 		sed -i '/exim4/d' /etc/fstab
@@ -1409,7 +1409,7 @@ main_function() {
 	/bin/sync
 	/bin/sync
 	mount -o remount,ro /
-        mount -o remount,ro /boot
+        mount -o remount,ro /media/boot
 	echo "Finished"
 
 	}
