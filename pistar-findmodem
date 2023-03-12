@@ -18,8 +18,8 @@ fi
 
 function resetGPIOModem {
         # Reset GPIO connected Modems
-        echo 20 > /sys/class/gpio/export
-        echo 21 > /sys/class/gpio/export
+        echo 491 > /sys/class/gpio/export
+        echo 490 > /sys/class/gpio/export
         echo out > /sys/class/gpio/gpio491/direction
         echo out > /sys/class/gpio/gpio490/direction
         sleep 0.5
@@ -31,8 +31,8 @@ function resetGPIOModem {
         echo 1 > /sys/class/gpio/gpio491/value
         echo 0 > /sys/class/gpio/gpio491/value
         sleep 0.5
-        echo 20 > /sys/class/gpio/unexport
-        echo 21 > /sys/class/gpio/unexport
+        echo 491 > /sys/class/gpio/unexport
+        echo 490 > /sys/class/gpio/unexport
         # Let the modem boot, or this script cant find it
         sleep 2
 }

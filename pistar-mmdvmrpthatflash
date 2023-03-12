@@ -82,8 +82,8 @@ then
   sudo killall MMDVMHost >/dev/null 2>&1
 
   echo "Resetting MCU to DFU mode ..."
-  echo 20 > /sys/class/gpio/export
-  echo 21 > /sys/class/gpio/export
+  echo 491 > /sys/class/gpio/export
+  echo 490 > /sys/class/gpio/export
   echo out > /sys/class/gpio/gpio491/direction
   echo out > /sys/class/gpio/gpio490/direction
   echo 1 > /sys/class/gpio/gpio491/value

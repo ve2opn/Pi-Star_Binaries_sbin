@@ -57,8 +57,8 @@ if [ -z "${1}" ]; then
 fi
 
 # Reset process for MMDVM HS_HAT Board (20,-21,21:-20,21)
-echo 20 > /sys/class/gpio/export
-echo 21 > /sys/class/gpio/export
+echo 491 > /sys/class/gpio/export
+echo 490 > /sys/class/gpio/export
 echo out > /sys/class/gpio/gpio491/direction
 echo out > /sys/class/gpio/gpio490/direction
 sleep 0.5
@@ -70,8 +70,8 @@ echo 0 > /sys/class/gpio/gpio491/value
 echo 1 > /sys/class/gpio/gpio491/value
 echo 0 > /sys/class/gpio/gpio491/value
 sleep 0.5
-echo 20 > /sys/class/gpio/unexport
-echo 21 > /sys/class/gpio/unexport
+echo 491 > /sys/class/gpio/unexport
+echo 490 > /sys/class/gpio/unexport
 sleep 2
 message="Modem reset complete"
 
