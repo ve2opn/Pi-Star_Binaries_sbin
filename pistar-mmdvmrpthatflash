@@ -16,6 +16,17 @@ if [ "$(id -u)" != "0" ]; then
 fi
 #
 
+if [[ $(platformDetect.sh) == "Odroid-C4" ]]; then
+  io20=491
+  io21=490
+fi
+
+if [[ $(platformDetect.sh) == "Odroid-C2" ]]; then
+  io20=219
+  io21=228
+fi
+
+
 if [ -z "$1" ]
 then
   echo "This tool is used to flash your MMDVM_HS Hat Modem"
@@ -82,14 +93,14 @@ then
   sudo killall MMDVMHost >/dev/null 2>&1
 
   echo "Resetting MCU to DFU mode ..."
-  echo 491 > /sys/class/gpio/export
-  echo 490 > /sys/class/gpio/export
-  echo out > /sys/class/gpio/gpio491/direction
-  echo out > /sys/class/gpio/gpio490/direction
-  echo 1 > /sys/class/gpio/gpio491/value
-  echo 0 > /sys/class/gpio/gpio490/value
+  echo $io20 > /sys/class/gpio/export
+  echo $io21 > /sys/class/gpio/export
+  echo out > /sys/class/gpio/gpio$io20/direction
+  echo out > /sys/class/gpio/gpio$io21/direction
+  echo 1 > /sys/class/gpio/gpio$io20/value
+  echo 0 > /sys/class/gpio/gpio$io21/value
   sleep 2
-  echo 1 > /sys/class/gpio/gpio490/value
+  echo 1 > /sys/class/gpio/gpio$io21/value
   sleep 2
     
   case ${1} in
@@ -108,7 +119,7 @@ then
     # Flashing always fails the first time. for some reason So just try it again ...
     stm32flash-code/stm32flash -w RPT_Hat-12mhz.bin -g 0x0 -R /dev/ttyAMA0
     sleep 1
-    echo 0 > /sys/class/gpio/gpio491/value
+    echo 0 > /sys/class/gpio/gpio$io20/value
     echo ""
     rm -rf /tmp/mmdvmrpthatfirmware 2> /dev/null
     read -n 1 -s -r -p "Flashing your ${1} modem complete, press any key to reboot your Pi-Star System..."
@@ -130,7 +141,7 @@ then
     # Flashing always fails the first time. for some reason So just try it again ...
     stm32flash-code/stm32flash -w RPT_Hat-12.288mhz.bin -g 0x0 -R /dev/ttyAMA0
     sleep 1
-    echo 0 > /sys/class/gpio/gpio491/value
+    echo 0 > /sys/class/gpio/gpio$io20/value
     echo ""
     rm -rf /tmp/mmdvmrpthatfirmware 2> /dev/null
     read -n 1 -s -r -p "Flashing your ${1} modem complete, press any key to reboot your Pi-Star System..."
@@ -152,7 +163,7 @@ then
     # Flashing always fails the first time. for some reason So just try it again ...
     stm32flash-code/stm32flash -w RPT_Hat-14.4mhz.bin -g 0x0 -R /dev/ttyAMA0
     sleep 1
-    echo 0 > /sys/class/gpio/gpio491/value
+    echo 0 > /sys/class/gpio/gpio$io20/value
     echo ""
     rm -rf /tmp/mmdvmrpthatfirmware 2> /dev/null
     read -n 1 -s -r -p "Flashing your ${1} modem complete, press any key to reboot your Pi-Star System..."
@@ -174,7 +185,7 @@ then
     # Flashing always fails the first time. for some reason So just try it again ...
     stm32flash-code/stm32flash -w RPT_Hat-19.2mhz.bin -g 0x0 -R /dev/ttyAMA0
     sleep 1
-    echo 0 > /sys/class/gpio/gpio491/value
+    echo 0 > /sys/class/gpio/gpio$io20/value
     echo ""
     rm -rf /tmp/mmdvmrpthatfirmware 2> /dev/null
     read -n 1 -s -r -p "Flashing your ${1} modem complete, press any key to reboot your Pi-Star System..."

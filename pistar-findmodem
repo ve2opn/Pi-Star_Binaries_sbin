@@ -16,23 +16,36 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
+io20=20
+io21=21
+
+if [[ $(platformDetect.sh) == "Odroid-C4" ]]; then
+  io20=491
+  io21=490
+fi
+
+if [[ $(platformDetect.sh) == "Odroid-C2" ]]; then
+  io20=219
+  io21=228
+fi
+
 function resetGPIOModem {
         # Reset GPIO connected Modems
-        echo 491 > /sys/class/gpio/export
-        echo 490 > /sys/class/gpio/export
-        echo out > /sys/class/gpio/gpio491/direction
-        echo out > /sys/class/gpio/gpio490/direction
+        echo $io20 > /sys/class/gpio/export
+        echo $io21 > /sys/class/gpio/export
+        echo out > /sys/class/gpio/gpio$io20/direction
+        echo out > /sys/class/gpio/gpio$io21/direction
         sleep 0.5
-        echo 0 > /sys/class/gpio/gpio491/value
-        echo 0 > /sys/class/gpio/gpio490/value
-        echo 1 > /sys/class/gpio/gpio490/value
+        echo 0 > /sys/class/gpio/gpio$io20/value
+        echo 0 > /sys/class/gpio/gpio$io21/value
+        echo 1 > /sys/class/gpio/gpio$io21/value
         sleep 1
-        echo 0 > /sys/class/gpio/gpio491/value
-        echo 1 > /sys/class/gpio/gpio491/value
-        echo 0 > /sys/class/gpio/gpio491/value
+        echo 0 > /sys/class/gpio/gpio$io20/value
+        echo 1 > /sys/class/gpio/gpio$io20/value
+        echo 0 > /sys/class/gpio/gpio$io20/value
         sleep 0.5
-        echo 491 > /sys/class/gpio/unexport
-        echo 490 > /sys/class/gpio/unexport
+        echo $io20 > /sys/class/gpio/unexport
+        echo $io21 > /sys/class/gpio/unexport
         # Let the modem boot, or this script cant find it
         sleep 2
 }
