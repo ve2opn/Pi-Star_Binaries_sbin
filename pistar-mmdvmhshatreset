@@ -23,8 +23,8 @@ else
 fi
 
 if [[ $(platformDetect.sh) == "Odroid-C4" ]]; then
-  io20=491
-  io21=490
+  io20=495
+  io21=485
 fi
 
 if [[ $(platformDetect.sh) == "Odroid-C2" ]]; then
