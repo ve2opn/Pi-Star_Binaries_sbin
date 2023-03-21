@@ -222,33 +222,36 @@ then
 	fi
 fi
 
+#SIZE in GB
 
-# Modified to make the output ALWAYS fit on 4GB SD-Cards
+SIZE=4
+PART_NUM=2
 
-# Borrowed from do_expand_rootfs in raspi-config
 expand_rootfs()
-	{
-	# Get the starting offset of the root partition
-	# (with Jessie's parted, now need to strip trailing 's' from PART_START)
-	PART_START=$(parted /dev/mmcblk0 -ms unit s p  \
-			| grep "^2" | cut -f 2 -d: | cut -f 1 -d s)
-	[ "$PART_START" ] || return 1
-	# Return value will likely be error for fdisk as it fails to reload the
-	# partition table because the root fs is mounted
-	fdisk /dev/$DST_DISK > /dev/null <<EOF
+{
+# Get the starting offset of the root partition
+  PART_START=$(parted /dev/mmcblk0 -ms unit s p | grep "^${PART_NUM}" | cut -f 2 -d: | sed 's/[^0-9]//g')
+  [ "$PART_START" ] || return 1
+
+  # Get the end of the root partition
+  SEC=$(( $SIZE * 1024  * 1024  * 1024 / 512 ))
+  PART_END=$(( $PART_START + $SEC ))
+
+  # Return value will likely be error for fdisk as it fails to reload the
+  # partition table because the root fs is mounted
+  fdisk /dev/mmcblk0 <<EOF
 p
 d
-2
+$PART_NUM
 n
 p
-2
+$PART_NUM
 $PART_START
-+3780M
+$PART_END
 p
 w
-q
 EOF
-	}
+}
 
 
 # =========== Disk Setup and Checks ===========
