@@ -365,7 +365,7 @@ echo "======== Clone Summary ========"
 echo "Clone mode               :  $CLONE_MODE"
 echo "Clone destination disk   :  $DST_DISK"
 echo "Clone destination rootfs :  $DST_ROOT_PARTITION ($DST_ROOT_VOL_NAME) on ${CLONE}"
-echo "Clone destination bootfs :  $DST_BOOT_PARTITION on ${CLONE}/media/boot"
+echo "Clone destination bootfs :  $DST_BOOT_PARTITION on ${CLONE}/boot"
 echo "Verbose mode             :  $VERBOSE"
 echo "==============================="
 
@@ -396,13 +396,13 @@ then
 	exit 0
 fi
 
-if [ ! -d $CLONE/media/boot ]
+if [ ! -d $CLONE/boot ]
 then
-	mkdir $CLONE/media/boot
+	mkdir $CLONE/boot
 fi
 
-echo "=> Mounting $DST_BOOT_PARTITION on $CLONE/media/boot"
-if ! mount $DST_BOOT_PARTITION $CLONE/media/boot
+echo "=> Mounting $DST_BOOT_PARTITION on $CLONE/boot"
+if ! mount $DST_BOOT_PARTITION $CLONE/boot
 then
 	umount $CLONE
 	echo -e "Mount failure of $DST_BOOT_PARTITION, aborting!\n"
@@ -531,8 +531,8 @@ echo ""
 #echo -n "Hit Enter when ready to unmount the /dev/$DST_DISK partitions..."
 #read resp
 
-echo "unmounting $CLONE/media/boot"
-umount $CLONE/media/boot
+echo "unmounting $CLONE/boot"
+umount $CLONE/boot
 
 echo "unmounting $CLONE"
 umount $CLONE
