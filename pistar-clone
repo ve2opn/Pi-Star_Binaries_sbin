@@ -223,7 +223,7 @@ then
 fi
 
 
-# Modified to make the output ALWAYS fit on 2GB SD-Cards
+# Modified to make the output ALWAYS fit on 4GB SD-Cards
 
 # Borrowed from do_expand_rootfs in raspi-config
 expand_rootfs()
@@ -243,7 +243,7 @@ n
 p
 2
 $PART_START
-+1780M
++3780M
 p
 w
 q
