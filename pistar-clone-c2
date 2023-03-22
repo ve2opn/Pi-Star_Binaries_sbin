@@ -230,7 +230,7 @@ expand_rootfs()
 	{
 	# Get the starting offset of the root partition
 	# (with Jessie's parted, now need to strip trailing 's' from PART_START)
-	PART_START=$(parted /dev/mmcblk1 -ms unit s p  \
+	PART_START=$(parted /dev/mmcblk0 -ms unit s p  \
 			| grep "^2" | cut -f 2 -d: | cut -f 1 -d s)
 	[ "$PART_START" ] || return 1
 	# Return value will likely be error for fdisk as it fails to reload the
