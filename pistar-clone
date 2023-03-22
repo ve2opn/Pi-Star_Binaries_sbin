@@ -223,8 +223,7 @@ then
 fi
 
 
-# Modified to make the output ALWAYS fit on 4GB SD-Cards
-SIZE=3
+# Modified to make the output ALWAYS fit on 2GB SD-Cards
 
 # Borrowed from do_expand_rootfs in raspi-config
 expand_rootfs()
@@ -234,11 +233,6 @@ expand_rootfs()
 	PART_START=$(parted /dev/mmcblk0 -ms unit s p  \
 			| grep "^2" | cut -f 2 -d: | cut -f 1 -d s)
 	[ "$PART_START" ] || return 1
-    
-    # Get the end of the root partition
-    SEC=$(( $SIZE * 1024  * 1024  * 1024 / 512 ))
-    PART_END=$(( $PART_START + $SEC ))   
-    
 	# Return value will likely be error for fdisk as it fails to reload the
 	# partition table because the root fs is mounted
 	fdisk /dev/$DST_DISK > /dev/null <<EOF
@@ -249,7 +243,7 @@ n
 p
 2
 $PART_START
-$PART_END
++1780M
 p
 w
 q
@@ -402,11 +396,6 @@ then
 	exit 0
 fi
 
-if [ ! -d $CLONE/media ]
-then
-	mkdir $CLONE/media
-fi
-
 if [ ! -d $CLONE/media/boot ]
 then
 	mkdir $CLONE/media/boot
@@ -542,7 +531,7 @@ echo ""
 #echo -n "Hit Enter when ready to unmount the /dev/$DST_DISK partitions..."
 #read resp
 
-echo "unmounting $CLONE/boot"
+echo "unmounting $CLONE/media/boot"
 umount $CLONE/media/boot
 
 echo "unmounting $CLONE"
