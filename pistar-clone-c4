@@ -542,7 +542,7 @@ echo ""
 #echo -n "Hit Enter when ready to unmount the /dev/$DST_DISK partitions..."
 #read resp
 
-rtfs_uuid=$(blkid -o value -s UUID $CLONE)
+rtfs_uuid=$(blkid -o value -s UUID $DST_ROOT_PARTITION)
 echo "Fix fstab & boot.ini to new UUID=$rtfs_uuid"
 sed -i "s/UUID=.*\/ ext4/UUID=$rtfs_uuid \/ ext4/g" $CLONE/etc/fstab
 sed -i "s/UUID=.* rootwait/UUID=$rtfs_uuid rootwait/g" $CLONE/media/boot/boot.ini
