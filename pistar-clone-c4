@@ -74,6 +74,7 @@ usage()
 	echo "    Example:  $PGM sda"
 	echo "    -v - list all files as they are copied."
 	echo "    -f - force initialize the destination partitions"
+    echo "    -4 - fit to 4GB SD card or larger, default 8GB+"
 	echo "    -x - use set -x for very verbose bash shell script debugging"
 	echo ""
 	echo "    Clone (rsync) a running Raspberry Pi file system to a destination"
@@ -107,6 +108,7 @@ usage()
 	}
 
 VERBOSE=off
+SIZE=7
 
 while [ "$1" ]
 do
@@ -117,6 +119,9 @@ do
 			;;
 		-f|--force-initialize)
 			FORCE_INITIALIZE=true
+			;;
+        -4)
+			SIZE=3
 			;;
 		-x)
 			set -x
@@ -236,7 +241,7 @@ expand_rootfs()
 	# Return value will likely be error for fdisk as it fails to reload the
 	# partition table because the root fs is mounted
     
-    SIZE=3
+    #SIZE=3
     #3GB
     SEC=$(( $SIZE * 1024  * 1024  * 1024 / 512 ))
     PART_END=$(( $PART_START + $SEC ))
