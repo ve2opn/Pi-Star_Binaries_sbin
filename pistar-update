@@ -112,7 +112,7 @@ main_function() {
 	mount -o remount,rw /
 	mount -o remount,rw /media/boot
 
-	if [ -t 1 ]; then
+	if [ "$1" ] && [ "$1" = "-f" ]; then
 		# This is running from a terminal, so it should be safe to update the OS
 		echo -e "Updating OS...\n"
         apt-get update --allow-insecure-repositories
